@@ -1,0 +1,11 @@
+{
+  "name": "myproject",
+  "dependencies": {
+    "jquery": "~3.3.1",
+    "font-awesome": "5.0.9",
+    "datatables": "DataTables#1.10.13"
+  },
+  "resolutions": {
+    "font-awesome": "5.0.9"
+  }
+}

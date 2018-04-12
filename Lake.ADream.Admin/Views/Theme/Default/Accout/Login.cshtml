@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "登录";
+}
+@section Css{
+    <link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css" rel="stylesheet">
+}
+<div class="container">
+    <div class="card card-login mx-auto mt-5">
+        <div class="card-header">本地账户登录</div>
+        <div class="card-body">
+            <form id="loginform" method="post">
+                <div class="form-group">
+                    <label for="account">登录账户</label>
+                    <input class="form-control" data-val="true" data-val-required="请输入登录账户" id="account" type="text" name="account" placeholder="邮箱/用户名/手机号码">
+                    <span class="text-danger field-validation-valid" data-valmsg-for="account" data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label for="password">登录密码</label>
+                    <input class="form-control" data-val="true" data-val-required="请输入登录密码" name="password" id="password" type="password" placeholder="密码">
+                    <span class="text-danger field-validation-valid" data-valmsg-for="password" data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox"> 自动登录
+                        </label>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary btn-block" value="开始登录" />
+            </form>
+            <div class="text-center">
+                <a class="small mt-3" href="register.html">注册账户</a>
+                <a class="small" href="forgot-password.html">找回密码?</a>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script type="text/javascript">
+        $(function () {
+            $("#loginform").submit(function (form) {
+                if ($(this).validate().form()) {
+                    $.post("#", $(this).serialize(), function (data) {
+
+                    });
+                }
+                form.preventDefault();
+                return false;
+            });
+        });
+    </script>
+}
+

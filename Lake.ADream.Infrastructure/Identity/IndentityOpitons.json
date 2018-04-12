@@ -1,0 +1,37 @@
+{
+  "claimsIdentity": {
+    "roleClaimType": "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+    "userNameClaimType": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+    "userIdClaimType": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+    "securityStampClaimType": "AspNet.Identity.SecurityStamp"
+  },
+  "lockout": {
+    "allowedForNewUsers": true,
+    "maxFailedAccessAttempts": 5,
+    "defaultLockoutTimeSpan": "00:05:00"
+  },
+  "password": {
+    "requiredLength": 6,
+    "requiredUniqueChars": 1,
+    "requireNonAlphanumeric": true,
+    "requireLowercase": true,
+    "requireUppercase": true,
+    "requireDigit": true
+  },
+  "signIn": {
+    "requireConfirmedEmail": false,
+    "requireConfirmedPhoneNumber": false
+  },
+  "tokens": {
+    "providerMap": {},
+    "emailConfirmationTokenProvider": "Default",
+    "passwordResetTokenProvider": "Default",
+    "changeEmailTokenProvider": "Default",
+    "changePhoneNumberTokenProvider": "Phone",
+    "authenticatorTokenProvider": "Authenticator"
+  },
+  "user": {
+    "allowedUserNameCharacters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+",
+    "requireUniqueEmail": false
+  }
+}

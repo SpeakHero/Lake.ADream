@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localizationDictionary culture="zh-cn">
+  <texts>
+    <text name="HomePage" value="主页" />
+    <text name="About" value="关于" />
+    <text name="WellcomeMessage" value="欢迎━(*｀∀´*)ノ亻!" />
+
+    <text name="FormIsNotValidMessage" value="表单无效。请检查并修复错误。" />
+    <text name="TenantNameCanNotBeEmpty" value="租户名称不能为空。" />
+
+    <text name="InvalidUserNameOrPassword" value="无效的用户名或密码" />
+    <text name="ThereIsNoTenantDefinedWithName{0}" value="没有定义名称的租户{0}" />
+    <text name="TenantIsNotActive" value="Tenant {0} is not active." />
+    <text name="UserIsNotActiveAndCanNotLogin" value="没有激活的用户{0}，不能登录" />
+    <text name="UserEmailIsNotConfirmedAndCanNotLogin">未确认您的电子邮件地址。您不能登录。</text>
+    <text name="UserLockedOutMessage">用户帐户已被锁定。请稍后再试。</text>
+    <text name="PleaseEnterLoginInformation" value="请输入你的登录信息" />
+    <text name="TenancyName" value="租户名称" />
+    <text name="UserNameOrEmail" value="用户名或者邮箱" />
+    <text name="Password" value="Password" />
+    <text name="RememberMe" value="记住我？" />
+    <text name="LogIn" value="登录" />
+
+    <text name="LoginFailed" value="登录失败!" />
+
+    <text name="NameSurname" value="姓名" />
+    <text name="UserName" value="用户名" />
+    <text name="Name" value="名" />
+    <text name="Surname" value="姓" />
+    <text name="EmailAddress" value="电子邮件地址" />
+
+    <text name="Tenants" value="租户" />
+    <text name="SavedSuccessfully" value="保存成功" />
+    <text name="CreateNewTenant" value="创建新的租户" />
+    <text name="AdminEmailAddress" value="管理员的电子邮件地址" />
+    <text name="Save" value="保存" />
+    <text name="Cancel" value="取消" />
+    <text name="TenantName_Regex_Description" value="户名称必须至少为2个字符，以字母开头，并继续字母、数字、破折号或下划线。" />
+    <text name="DefaultPasswordIs" value="默认密码：{0}" />
+    <text name="CanBeEmptyToLoginAsHost" value="可以作为主机以空方式登录。" />
+    <text name="Register" value="注册" />
+    <text name="OrLoginWith" value="其他登录方式" />
+    <text name="WaitingForActivationMessage" value="您的帐户正在等待由系统管理员激活。" />
+    <text name="TenantSelection" value="选择租户" />
+    <text name="TenantSelection_Detail" value="请选择下列租户中的一个。" />
+    <text name="Logout" value="退出登录" />
+
+    <text name="RegisterFormUserNameInvalidMessage">请不要输入用户名的电子邮件地址。</text>
+
+    <text name="DatabaseConnectionString" value="数据库连接字符串" />
+    <text name="Users" value="Users" />
+    <text name="IsActive" value="已经激活" />
+    <text name="FullName" value="全名" />
+    <text name="CreateNewUser" value="创建新的用户" />
+    <text name="Yes" value="确定" />
+    <text name="No" value="取消" />
+    <text name="Optional" value="选择" />
+    <text name="LeaveEmptyToSwitchToHost">留空以切换到主机</text>
+
+    <text name="CurrentTenant">目前的租户</text>
+    <text name="NotSelected">没有选择</text>
+    <text name="Change">切换</text>
+    <text name="ChangeTenant">切换租户</text>
+
+    <text name="MultiLevelMenu">多级菜单</text>
+    <text name="Back">返回</text>
+    <text name="SuccessfullyRegistered">注册成功</text>
+    <text name="WaitingForEmailActivation">您的电子邮件地址已经被激活。</text>
+    <text name="Roles">角色</text>
+    <text name="DisplayName">显示名称</text>
+
+    <text name="Edit">编辑</text>
+    <text name="Delete">删除</text>
+
+    <text name="CreateNewRole">创建新的角色</text>
+    <text name="RoleName">角色名称</text>
+    <text name="Actions">操作</text>
+
+    <text name="CouldNotCompleteLoginOperation">
+      无法完成登录操作。请稍后再试。
+    </text>
+
+    <text name="CouldNotValidateExternalUser">无法验证外部用户</text>
+    <text name="EditRole">编辑角色</text>
+    <text name="EditTenant">编辑租户</text>
+    <text name="EditUser">编辑用户</text>
+    <text name="TenantIdIsNotActive{0}">租户 {0} 没有激活</text>
+    <text name="UnknownTenantId{0}">未知租户 {0}</text>
+    <text name="IdentityConcurrencyFailure">乐观并发失败,对象已修改.</text>
+    <text name="IdentityDefaultError" value="发生了一个未知的异常错误." />
+    <text name="IdentityDuplicateEmail" value="邮箱地址 '{0}' 已被占用." />
+    <text name="IdentityDuplicateRoleName">角色名称 '{0}' 已经被使用.</text>
+    <text name="IdentityDuplicateUserName" value="名字{0}已被占用." />
+    <text name="IdentityInvalidEmail" value="邮箱地址 '{0}' 不符合要求." />
+    <text name="IdentityInvalidPasswordHasherCompatibilityMode">提供的哈希密码兼容模式无效.</text>
+    <text name="IdentityInvalidPasswordHasherIterationCount">迭代次数必须是一个正整数.</text>
+    <text name="IdentityInvalidRoleName">角色名称'{0}'无效.</text>
+    <text name="IdentityInvalidToken" value="无效的token." />
+    <text name="IdentityInvalidUserName" value="用户名{0}不符合要求, 只能包含字母和数字." />
+    <text name="IdentityLoginAlreadyAssociated">登录的用户已存在.</text>
+    <text name="IdentityPasswordMismatch" value="密码错误." />
+    <text name="IdentityPasswordRequiresDigit" value="密码至少要包含一位数字 ('0'-'9')." />
+    <text name="IdentityPasswordRequiresLower" value="密码至少要包含一位小写字母 ('a'-'z')." />
+    <text name="IdentityPasswordRequiresNonAlphanumeric" value="密码必须包含一位非字母特殊符号或数字." />
+    <text name="IdentityPasswordRequiresUpper" value="密码至少要包含一位大写字母 ('A'-'Z')." />
+    <text name="IdentityPasswordTooShort" value="密码至少要{0}位." />
+    <text name="IdentityRoleNotFound" value="角色{0}不存在." />
+    <text name="IdentityUserAlreadyHasPassword" value="用户已设置密码." />
+    <text name="IdentityUserAlreadyInRole" value="用户已拥有此角色." />
+    <text name="IdentityUserLockedOut">用户被锁定.</text>
+    <text name="IdentityUserLockoutNotEnabled" value="对此用户，不能启用锁定." />
+    <text name="IdentityUserNameNotFound" value="用户 {0} 不存在." />
+    <text name="IdentityUserNotInRole" value="用户不包含此角色." />
+    <text name="Email">邮箱</text>
+    <text name="EmailSecurityCodeSubject">安全码</text>
+    <text name="EmailSecurityCodeBody">您的安全码是: {0}</text>
+    <text name="Sms">短信</text>
+    <text name="SmsSecurityCodeMessage">您的短信验证码是: {0}</text>
+  </texts>
+</localizationDictionary>
