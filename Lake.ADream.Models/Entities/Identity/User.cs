@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Data;
 using Lake.ADream.Infrastructure.Attributes;
+using System.ComponentModel;
 
 namespace Lake.ADream.Models.Entities.Identity
 {
@@ -174,7 +175,6 @@ namespace Lake.ADream.Models.Entities.Identity
         {
             return UserName;
         }
-
     }
     public class SecurityAudit
     {

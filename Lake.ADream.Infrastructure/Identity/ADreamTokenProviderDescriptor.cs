@@ -7,7 +7,7 @@ namespace Lake.ADream.Infrastructure.Identity
     /// <summary>
     /// 用于表示令牌提供程序 <see cref="T:Microsoft.AspNetCore.Identity.TokenOptions" />'s TokenMap.
     /// </summary>
-    public class TokenProviderDescriptor
+    public class ADreamTokenProviderDescriptor
     {
         /// <summary>
         /// 将用于此令牌提供程序的类型。
@@ -30,7 +30,7 @@ namespace Lake.ADream.Infrastructure.Identity
         /// 初始化一个新实例 <see cref="T:Microsoft.AspNetCore.Identity.TokenProviderDescriptor" /> class.
         /// </summary>
         /// <param name="type">此令牌提供程序的具体类型。</param>
-        public TokenProviderDescriptor(Type type)
+        public ADreamTokenProviderDescriptor(Type type)
         {
             ProviderType = type;
         }

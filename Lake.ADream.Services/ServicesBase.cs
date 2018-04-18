@@ -2,14 +2,17 @@
 using Lake.ADream.EntityFrameworkCore;
 using Lake.ADream.Infrastructure.Identity;
 using Lake.ADream.IServices;
+using log4net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,12 +29,12 @@ namespace Lake.ADream.Services
         /// <value>
         /// The <see cref="T:Microsoft.Extensions.Logging.ILogger" /> used to log messages from the manager.
         /// </value>
-        public virtual ILogger Logger
+        public virtual ILog Logger
         {
             get;
             set;
-        }
-
+        } = LogManager.GetLogger(typeof(TEntity));
+        DbUpdateConcurrencyException dbUpdateConcurrencyException = null;
         /// <summary>
         /// The <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> used.
         /// </summary>
@@ -66,7 +69,7 @@ namespace Lake.ADream.Services
         protected DbSet<TEntity> Dbset
         {
             get
-            { return DbContext.Set<TEntity>(); }
+            { return dbContext.Set<TEntity>(); }
         }
         protected void Try(Action action)
         {
@@ -79,137 +82,204 @@ namespace Lake.ADream.Services
                 _logger.LogError("ServiceFactory.Try", ex);
             }
         }
+        public virtual async Task<IQueryable<TResult>> FromSqlAsync<TResult, Entity>(Expression<Func<Entity, bool>> predicate, Expression<Func<Entity, TResult>> selector, string sql) where TResult : class where Entity : EntityBase
+        {
+            var queryable = GetQueryable(predicate, selector);
+            return await Task.FromResult(queryable.FromSql(sql));
+        }
+        public virtual IQueryable<Entity> GetQueryable<Entity>() where Entity : EntityBase
+        {
+            return dbContext.Set<Entity>().Where(detele => !detele.IsDelete);
+        }
+        public virtual IQueryable<TEntity> GetQueryable()
+        {
+            return GetQueryable<TEntity>();
+        }
+        public virtual IQueryable<TResult> GetQueryable<TResult, Entity>(Expression<Func<Entity, TResult>> selector) where TResult : class where Entity : EntityBase
+        {
+            selector.CheakArgument();
+            return GetQueryable<Entity>().Select(selector);
+        }
+        public virtual IQueryable<Entity> GetQueryable<Entity>(Expression<Func<Entity, bool>> predicate) where Entity : EntityBase
+        {
+            predicate.CheakArgument();
+            return GetQueryable<Entity>().Where(predicate);
+        }
+        public virtual IQueryable<TResult> GetQueryable<TResult, Entity>(Expression<Func<Entity, bool>> predicate, Expression<Func<Entity, TResult>> selector) where TResult : class where Entity : EntityBase
+        {
+            selector.CheakArgument();
+            return GetQueryable(predicate).Select(selector);
+        }
 
-        public virtual async Task<IList<TResult>> GetListAsync<TResult>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TResult>> selector) where TResult : class
+        public virtual async Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await GetQueryable(predicate, selector).ToListAsync();
+            return await SingleOrDefaultAsync<TEntity>(predicate);
         }
-        public virtual IQueryable<TResult> GetQueryable<TResult>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TResult>> selector) where TResult : class
+        public virtual async Task<Entity> SingleOrDefaultAsync<Entity>(Expression<Func<Entity, bool>> predicate) where Entity : EntityBase
         {
-            return Dbset.Where(predicate).Select(selector);
+            return await GetQueryable(predicate).SingleOrDefaultAsync();
         }
-        public virtual async Task<TResult> GetEntityFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TResult>> selector) where TResult : class
+        public virtual async Task<TResult> SingleOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TResult>> selector) where TResult : class
+        {
+            return await SingleOrDefaultAsync<TResult, TEntity>(predicate, selector);
+        }
+        public virtual async Task<TResult> SingleOrDefaultAsync<TResult, Entity>(Expression<Func<Entity, bool>> predicate, Expression<Func<Entity, TResult>> selector) where TResult : class where Entity : EntityBase
+        {
+            return await GetQueryable(predicate, selector).SingleOrDefaultAsync();
+        }
+        public virtual async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await FirstOrDefaultAsync(predicate);
+        }
+
+        public virtual async Task<Entity> FirstOrDefaultAsync<Entity>(Expression<Func<Entity, bool>> predicate) where Entity : EntityBase
+        {
+            return await GetQueryable(predicate).FirstOrDefaultAsync();
+        }
+        public virtual async Task<TResult> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TResult>> selector) where TResult : class
+        {
+            return await FirstOrDefaultAsync<TResult, TEntity>(predicate, selector);
+        }
+        public virtual async Task<TResult> FirstOrDefaultAsync<TResult, Entity>(Expression<Func<Entity, bool>> predicate, Expression<Func<Entity, TResult>> selector) where TResult : class where Entity : EntityBase
         {
             return await GetQueryable(predicate, selector).FirstOrDefaultAsync();
         }
-
-        public virtual async Task<TResult> FindAsync<TResult>(Expression<Func<TEntity, TResult>> selector, string key) where TResult : class
+        public virtual async Task<TResult> FindByIdAsync<TResult, Entity>(Expression<Func<Entity, TResult>> selector, string key) where TResult : class where Entity : EntityBase
         {
-            return await GetQueryable(d => d.Id.Equals(key), selector).FirstOrDefaultAsync();
+            return await FirstOrDefaultAsync(d => d.Id.Equals(key), selector);
         }
-
+        public virtual async Task<TEntity> FindByIdAsync( string key)
+        {
+            return await FirstOrDefaultAsync(d => d.Id.Equals(key));
+        }
+        public virtual async Task<TResult> FindByIdAsync<TResult>(Expression<Func<TEntity, TResult>> selector, string key) where TResult : class
+        {
+            return await FindByIdAsync<TResult, TEntity>(selector, key);
+        }
         public virtual async Task<int> GetCountAsync()
         {
-            return await Dbset.CountAsync();
+            return await GetCountAsync<TEntity>();
 
         }
-        public virtual async Task<IList<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<int> GetCountAsync<Entity>() where Entity : EntityBase
         {
-            return await Dbset.Where(predicate).ToListAsync();
-        }
+            return await GetQueryable<Entity>().CountAsync();
 
-        public virtual async Task<IList<TEntity>> GetListAsync()
-        {
-            return await Dbset.ToListAsync();
         }
-        public virtual async Task<IPagedList<TResult>> GetListAsync<TResult>(Expression<Func<TEntity, TResult>> selector, int pageNumber = 1, int pageSize = 10) where TResult : class
+        public virtual async Task<int> GetCountAsync<Entity>(Expression<Func<Entity, bool>> predicate) where Entity : EntityBase
         {
-            return await Dbset.Select(selector).ToPagedListAsync(pageNumber, pageSize);
-        }
-        public virtual async Task<IList<TResult>> GetListAsync<TResult>(Expression<Func<TEntity, TResult>> selector) where TResult : class
-        {
-            return await Dbset.Select(selector).ToListAsync();
+            return await GetQueryable(predicate).CountAsync();
         }
         public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await Dbset.CountAsync(predicate);
+            return await GetCountAsync<TEntity>(predicate);
         }
-        public virtual async Task<TEntity> FindAsync(params object[] key)
+        public virtual async Task<IList<Entity>> GetListAsync<Entity>() where Entity : EntityBase
         {
-            return await Dbset.FindAsync(key);
+            return await GetQueryable<Entity>().ToListAsync();
         }
-
-        public virtual async Task<TEntity> FindAsync(string key, byte[] timeSpan)
+        public virtual async Task<IList<Entity>> GetListAsync<Entity>(Expression<Func<Entity, bool>> predicate) where Entity : EntityBase
         {
-            return await Dbset.Where(d => d.Id.Equals(key) && d.TimeSpan.Equals(timeSpan)).FirstOrDefaultAsync();
+            return await GetQueryable(predicate).ToListAsync();
+        }
+        public virtual async Task<IList<TResult>> GetListAsync<TResult, Entity>(Expression<Func<Entity, bool>> predicate, Expression<Func<Entity, TResult>> selector) where TResult : class where Entity : EntityBase
+        {
+            return await GetQueryable(predicate, selector).ToListAsync();
+        }
+        public virtual async Task<IPagedList<TResult>> GetListAsync<TResult, Entity>(Expression<Func<Entity, TResult>> selector, int pageNumber = 1, int pageSize = 10) where TResult : class where Entity : EntityBase
+        {
+            return await GetQueryable(selector).ToPagedListAsync(pageNumber, pageSize);
+        }
+        public virtual async Task<TEntity> FindAsync(string key)
+        {
+            return await FindAsync<TEntity>(key);
+        }
+        public virtual async Task<Entity> FindAsync<Entity>(string key) where Entity : EntityBase
+        {
+            key.CheakArgument();
+            return await FindAsync<Entity, Entity>(predicate => predicate.Id.Equals(key), selector => selector);
+        }
+        public async Task<TResult> FindAsync<TResult, Entity>(Expression<Func<Entity, bool>> predicate, Expression<Func<Entity, TResult>> selector, CancellationToken cancellationToken = default) where TResult : class where Entity : EntityBase
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            ThrowIfDisposed();
+            return await FirstOrDefaultAsync(predicate, selector);
+        }
+        public virtual async Task<Entity> FindAsync<Entity>(string key, byte[] timeSpan) where Entity : EntityBase
+        {
+            if (!key.IsNotNullOrEmpty())
+            {
+                return null;
+            }
+            return await FirstOrDefaultAsync<Entity>(d => d.Id.Equals(key) && d.TimeSpan.Equals(timeSpan));
         }
         public virtual async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await Dbset.AnyAsync(predicate);
+            return await AnyAsync<TEntity>(predicate);
         }
-        public virtual async Task<IdentityResult> DeleteAsync(string id, byte[] timespan, bool SaveRight)
+        public virtual async Task<bool> AnyAsync<Entity>(Expression<Func<Entity, bool>> predicate) where Entity : EntityBase
         {
-            if (id.IsNullOrEmpty())
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-            if (timespan == null)
-            {
-                throw new ArgumentNullException(nameof(timespan));
-            }
-            var entites = Dbset.Where(d => id == d.Id && timespan == d.TimeSpan).ToArray();
-            return await DeleteAsync(SaveRight, entites);
+            return await GetQueryable(predicate).AnyAsync();
         }
-        public virtual async Task<IdentityResult> DeleteAsync(string id, byte[] timespan)
+        public virtual async Task<ADreamResult> UpdateAsync<Entity>(Entity entity, params string[] propertys) where Entity : EntityBase
         {
-            return await DeleteAsync(id, timespan, true);
+            CancellationToken.ThrowIfCancellationRequested();
+            ThrowIfDisposed();
+            entity.CheakArgument();
+            var dbset = dbContext.Set<Entity>();
+            dbContext.Entry(entity).State = EntityState.Unchanged;
+            foreach (var property in propertys)
+            {
+                dbContext.Entry(entity).Property(property).IsModified = true;
+            }
+            dbContext.Entry(entity).Property(d => d.EditedTime).IsModified = true;
+
+            return await SaveChangesAsync(CancellationToken);
         }
-
-
-        public virtual async Task<IdentityResult> UpdateRangeAsync(bool saveRight, params TEntity[] entity)
+        public virtual async Task<ADreamResult> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default, params string[] propertys)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
-            if (entity.Length == 1)
-            {
-                Dbset.Update(entity[0]);
-
-            }
-            else
-            {
-                Dbset.UpdateRange(entity);
-            }
-            if (saveRight)
-            {
-                var save = await SaveChangesAsync();
-                if (save > 0)
-                {
-                    return IdentityResult.Success;
-                }
-                else
-                {
-                    return IdentityResult.Failed(new IdentityError { Code = "entity", Description = "保存失败详细内容查看系统日志" });
-                }
-            }
-            else
-            {
-                return IdentityResult.Failed(new IdentityError { Code = "SaveRight", Description = $"没有设置{ nameof(saveRight)}为真，所以没有保存到数据库" });
-            }
+            return await UpdateAsync<TEntity>(entity, propertys);
         }
-
-        public async Task<int> SaveChangesAsync()
+        public virtual async Task<ADreamResult> UpdateAsync<Entity>(Entity entity, CancellationToken cancellationToken = default) where Entity : EntityBase
         {
-            using (var scope = DbContext.Database.BeginTransaction())
+            cancellationToken.ThrowIfCancellationRequested();
+            ThrowIfDisposed();
+            entity.CheakArgument();
+            var dbset = dbContext.Set<Entity>();
+            dbset.Attach(entity);
+            dbset.Update(entity);
+            return await SaveChangesAsync(cancellationToken);
+        }
+        public virtual async Task<ADreamResult> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        {
+            return await UpdateAsync<TEntity>(entity, cancellationToken);
+        }
+        public async Task<ADreamResult> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            if (!AutoSaveChanges)
+            {
+                return ADreamResult.Failed(new ADreamError { Code = nameof(AutoSaveChanges), Description = $"没有设置{ nameof(AutoSaveChanges)}为真，所以没有保存到数据库" });
+            }
+            using (var scope = dbContext.Database.BeginTransaction())
             {
                 try
                 {
-                    var c = await DbContext.SaveChangesAsync();
+                    var c = await dbContext.SaveChangesAsync(cancellationToken);
                     scope.Commit();
-                    return c;
+                    var result = ADreamResult.Success;
+                    result.Result = c;
+                    return result;
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-
+                    Logger.Error(ex.Message, ex);
                     scope.Rollback();
-                    return 0;
+                    return ADreamResult.Failed(new ADreamError { Code = ex.HResult.ToString(), Description = ex.ToJson() });
                 }
             }
         }
 
-        private TEntity[] GetEntites(string[] id, byte[][] timespan)
+        private TEntity[] GetEntites(string[] id, DateTime[] timespan)
         {
             if (id == null)
             {
@@ -223,16 +293,23 @@ namespace Lake.ADream.Services
             {
                 throw new ArgumentNullException($"{nameof(id)}和{nameof(timespan)}的维度不一样，两者必须要一样的维度！");
             }
-            var entites = Dbset.Where(d => id.Contains(d.Id) && timespan.Contains(d.TimeSpan)).ToArray();
+            var entites = GetQueryable().Where(d => id.Contains(d.Id) && timespan.Contains(d.TimeSpan)).ToArray();
             return entites;
         }
 
-        private async Task<int> DeleteAsync(EntityBase entity, bool isdelete)
+        private async Task<ADreamResult> DeleteAsync(TEntity entity, bool isdelete, CancellationToken cancellationToken = default)
         {
             entity.IsDelete = isdelete;
-            DbContext.ChangeTracker.TrackGraph(entity, e =>
-                e.Entry.Property("IsDelete").IsModified = true);
-            return await SaveChangesAsync();
+            return await UpdateAsync(entity, cancellationToken);
+        }
+        /// <summary>
+        /// 恢复删除
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public virtual async Task<ADreamResult> ReDeletedAsync(TEntity entity)
+        {
+            return await DeleteAsync(entity, false);
         }
         /// <summary>
         /// 检查数据是否存在
@@ -242,26 +319,52 @@ namespace Lake.ADream.Services
         /// <returns></returns>
         protected virtual async Task<bool> IsExist(string id)
         {
-            return await Dbset.AnyAsync(s => s.Id.Equals(id));
+            return await IsExist<TEntity>(id);
         }
         /// <summary>
-        /// 恢复删除
+        /// 检查数据是否存在
         /// </summary>
-        /// <param name="entity"></param>
+        /// <typeparam name="Entity"></typeparam>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public virtual async Task<int> ReDeletedAsync(EntityBase entity)
+        protected virtual async Task<bool> IsExist<Entity>(string id) where Entity : EntityBase
         {
-            return await DeleteAsync(entity, false);
+            return await AnyAsync<Entity>(s => s.Id.Equals(id));
         }
-        protected readonly ADreamDbContext DbContext;
+
+
+        public virtual async Task<ADreamResult> CreateAsync(TEntity entity)
+        {
+            return await CreateAsync(entity, default);
+        }
+        public virtual async Task<ADreamResult> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            ThrowIfDisposed();
+            entity.CheakArgument();
+            await Dbset.AddAsync(entity, cancellationToken);
+            return await SaveChangesAsync(cancellationToken);
+        }
+
+        protected string PrimaryKeyValue(TEntity entity)
+        {
+            var entry = dbContext.Entry(entity);
+            return entry.Property(((Property[])(entry.Metadata.FindPrimaryKey().Properties))[0].Name).CurrentValue.ToString();
+        }
+
+        protected string GetTableName<Entity>(Entity entity) where Entity : EntityBase => RelationalMetadataExtensions.Relational(dbContext.Entry(entity).Metadata).TableName;
+
+
+        protected readonly ADreamDbContext dbContext;
         protected bool _disposed;
         protected readonly ILogger _logger;
         private HttpContext _context;
         private readonly IHttpContextAccessor _contextAccessor;
-        public ServicesBase(ADreamDbContext aDreamDbContext, IHttpContextAccessor contextAccessor)
+        public ServicesBase(ADreamDbContext aDreamDbContext, IHttpContextAccessor contextAccessor, IServiceProvider services)
         {
-            DbContext = aDreamDbContext;
+            dbContext = aDreamDbContext;
             _contextAccessor = contextAccessor;
+            Services = services ?? throw new ArgumentNullException(nameof(services));
             var loggerFactory = new LoggerFactory();
             _logger = loggerFactory.CreateLogger(GetType());
         }
@@ -291,91 +394,17 @@ namespace Lake.ADream.Services
             _disposed = true;
             GC.SuppressFinalize(this);
         }
-
-        public virtual async Task<IdentityResult> CreateAsync(params TEntity[] entity)
+        /// <summary>
+        /// 获取或设置一个标志，指示是否应坚持CreateAsync的变化后，updateasync和DeleteAsync被称为。
+        /// </summary>
+        /// <value>
+        /// 如果应自动保留更改，则为true，否则为false。
+        /// </value>
+        public bool AutoSaveChanges
         {
-            return await CreateAsync(true, entity);
-        }
-        public virtual async Task<IdentityResult> CreateAsync(bool SaveRight, params TEntity[] entity)
-        {
-            entity.CheakArgument();
-            if (entity.Length == 1)
-            {
-                await Dbset.AddAsync(entity[0]);
-
-            }
-            else
-            {
-                await Dbset.AddRangeAsync(entity);
-            }
-            if (SaveRight)
-            {
-                var save = await SaveChangesAsync();
-                if (save > 0)
-                {
-                    return IdentityResult.Success;
-                }
-                else
-                {
-                    return IdentityResult.Failed(new IdentityError { Code = "entity", Description = "保存失败详细内容查看系统日志" });
-                }
-            }
-            else
-            {
-                return IdentityResult.Failed(new IdentityError { Code = "SaveRight", Description = $"没有设置{ nameof(SaveRight)}为真，所以没有保存到数据库" });
-            }
-        }
-        public virtual async Task<IdentityResult> DeleteAsync(bool SaveRight, params TEntity[] entity)
-        {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-            try
-            {
-                _logger.LogInformation(GetTableName(entity[0]), entity);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, ex);
-            }
-            if (entity.Length == 1)
-            {
-                Dbset.Remove(entity[0]);
-
-            }
-            else
-            {
-                Dbset.RemoveRange(entity);
-            }
-            if (SaveRight)
-            {
-                var save = await SaveChangesAsync();
-                if (save > 0)
-                {
-                    return IdentityResult.Success;
-                }
-                else
-                {
-                    return IdentityResult.Failed(new IdentityError { Code = "entity", Description = "保存失败详细内容查看系统日志" });
-                }
-            }
-            else
-            {
-                return IdentityResult.Failed(new IdentityError { Code = "SaveRight", Description = $"没有设置{ nameof(SaveRight)}为真，所以没有保存到数据库" });
-            }
-        }
-        public virtual async Task<IdentityResult> DeleteAsync(params TEntity[] entity)
-        {
-            return await DeleteAsync(true, entity);
-        }
-
-        protected string PrimaryKeyValue(TEntity entity)
-        {
-            var entry = DbContext.Entry(entity);
-            return entry.Property(((Property[])(entry.Metadata.FindPrimaryKey().Properties))[0].Name).CurrentValue.ToString();
-        }
-
-        protected string GetTableName(TEntity entity) => RelationalMetadataExtensions.Relational(DbContext.Entry(entity).Metadata).TableName;
+            get;
+            set;
+        } = true;
+        public IServiceProvider Services { get; }
     }
 }

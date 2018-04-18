@@ -19,7 +19,7 @@ namespace Lake.ADream.EntityFrameworkCore
         /// <summary>
         /// 角色权限
         /// </summary>
-        public DbSet<RolePermission> RolesPermissions { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
         /// <summary>
         /// 功能
         /// </summary>
@@ -28,7 +28,10 @@ namespace Lake.ADream.EntityFrameworkCore
         /// 角色
         /// </summary>
         public DbSet<Role> Roles { get; set; }
-
+        /// <summary>
+        /// 角色声明
+        /// </summary>
+        public DbSet<RoleClaim> RoleClaims { get; set; }
         /// <summary>
         /// 用户声明
         /// </summary>

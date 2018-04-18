@@ -7,7 +7,7 @@ namespace Lake.ADream.Infrastructure.Identity
     /// <summary>
     /// Options for user tokens.
     /// </summary>
-    public class TokenOptions
+    public class ADreamTokenOptions
     {
         /// <summary>
         ///默认令牌提供程序名称，用于电子邮件确认、密码重置和更改电子邮件。
@@ -32,11 +32,11 @@ namespace Lake.ADream.Infrastructure.Identity
         /// <summary>
         ///将用于使用提供程序名称的密钥构造用户令牌提供程序。
         /// </summary>
-        public Dictionary<string, TokenProviderDescriptor> ProviderMap
+        public Dictionary<string, ADreamTokenProviderDescriptor> ProviderMap
         {
             get;
             set;
-        } = new Dictionary<string, TokenProviderDescriptor>();
+        } = new Dictionary<string, ADreamTokenProviderDescriptor>();
 
 
         /// <summary>

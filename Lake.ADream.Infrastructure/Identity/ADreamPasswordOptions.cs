@@ -7,7 +7,7 @@ namespace Lake.ADream.Infrastructure.Identity
     /// <summary>
     /// 指定密码要求的选项。
     /// </summary>
-    public class PasswordOptions
+    public class ADreamPasswordOptions
     {
         /// <summary>
         ///获取或设置密码必须为最小的长度。

@@ -39,7 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "WebAppli
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{0BD41EEF-3913-43A8-8ABE-FA056A619756}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lake.ADream.ViewModels", "Lake.ADream.ViewModels\Lake.ADream.ViewModels.csproj", "{70F0665C-CBF1-4905-AE20-15F37A06DC43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lake.ADream.ViewModels", "Lake.ADream.ViewModels\Lake.ADream.ViewModels.csproj", "{70F0665C-CBF1-4905-AE20-15F37A06DC43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lake.ADream.Migrator", "Lake.ADream.Migrator\Lake.ADream.Migrator.csproj", "{5CE62324-9E8C-442F-A5A5-9309C824E285}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +97,10 @@ Global
 		{70F0665C-CBF1-4905-AE20-15F37A06DC43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70F0665C-CBF1-4905-AE20-15F37A06DC43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70F0665C-CBF1-4905-AE20-15F37A06DC43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CE62324-9E8C-442F-A5A5-9309C824E285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CE62324-9E8C-442F-A5A5-9309C824E285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CE62324-9E8C-442F-A5A5-9309C824E285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CE62324-9E8C-442F-A5A5-9309C824E285}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

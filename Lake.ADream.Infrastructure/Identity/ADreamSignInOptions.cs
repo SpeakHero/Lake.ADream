@@ -7,7 +7,7 @@ namespace Lake.ADream.Infrastructure.Identity
     /// <summary>
     /// 配置登录的选项。
     /// </summary>
-    public class SignInOptions
+    public class ADreamSignInOptions
     {
         /// <summary>
         ///获取或设置一个标志，该标志指示是否需要签名确认的电子邮件地址。

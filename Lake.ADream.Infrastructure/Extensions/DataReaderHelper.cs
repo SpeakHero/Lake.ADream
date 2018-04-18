@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace System.Data
+namespace System.Data.SqlClient
 {
     /// <summary>
     /// 

@@ -14,16 +14,25 @@ using Lake.ADream.Models.Entities.Identity;
 using Lake.ADream.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Lake.ADream.Infrastucture.Test
 {
     [TestClass]
     public class UnitTest1
     {
-        private static ILoggerFactory logger => new LoggerFactory()
-         .AddDebug((categoryName, logLevel) => (logLevel == LogLevel.Information) && (categoryName == DbLoggerCategory.Database.Command.Name))
-        .AddConsole((categoryName, logLevel) => (logLevel == LogLevel.Information) && (categoryName == DbLoggerCategory.Database.Command.Name));
-        ADreamDbContext aDreamDbContext = new ADreamDbContext();
+   
+        private readonly ADreamDbContext aDreamDbContext ;
+        private readonly UserManagerService userManagerService;
+        private readonly IServiceCollection services;
+
+        public UnitTest1(ADreamDbContext aDreamDbContext, UserManagerService userManagerService, IServiceCollection services)
+        {
+            this.aDreamDbContext = aDreamDbContext ?? throw new ArgumentNullException(nameof(aDreamDbContext));
+            this.userManagerService = userManagerService;
+            this.services = services;
+        }
+
         [TestMethod]
         public void TestMethod1()
         {
@@ -49,8 +58,7 @@ namespace Lake.ADream.Infrastucture.Test
         [TestMethod]
         public async Task TestADreamDbContext()
         {
-            using (UserManagerService userManagerService = new UserManagerService(aDreamDbContext, null))
-            {
+         
                 var user3 = new User();
                 user3.UserName = "SuperAdmin4";
                 user3.PasswordHash = "123qwe";
@@ -69,9 +77,7 @@ namespace Lake.ADream.Infrastucture.Test
                 user1.PhoneNumber = user1.Email = user1.Id;
                 user1.EmailConfirmed = true;
                 user1.PhoneNumberConfirmed = true;
-                var reslut = await userManagerService.CreateAsync(false, user2, user1, user3);
-                var a = await userManagerService.SaveChangesAsync();
-            }
+                var reslut = await userManagerService.CreateAsync(user2);
         }
         [TestMethod]
         public async Task TestADreamDbContextDel()
@@ -81,16 +87,7 @@ namespace Lake.ADream.Infrastucture.Test
             await aDreamDbContext.SaveChangesAsync();
         }
 
-        [TestMethod]
-        public async Task GetUserNameById()
-        {
-            var loggerFactory = new LoggerFactory();
-            var loger = loggerFactory.CreateLogger<UserManagerService>();
-            UserManagerService userManagerService = new UserManagerService(aDreamDbContext, null);
-            string userid = "e148d56e-66ab-43f3-a3c5-48de5b6fd983";
-            string username = await userManagerService.GetUserNameById(userid);
-            userManagerService.Dispose();
-        }
+    
       
         ~UnitTest1()
         {

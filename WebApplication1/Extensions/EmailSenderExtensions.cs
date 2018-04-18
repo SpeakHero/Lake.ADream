@@ -5,7 +5,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using WebApplication1.Services;
 
-namespace WebApplication1.Services
+namespace Microsoft.AspNetCore.Mvc
 {
     public static class EmailSenderExtensions
     {

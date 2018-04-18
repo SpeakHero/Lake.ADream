@@ -8,7 +8,7 @@ namespace Lake.ADream.Infrastructure.Identity
     /// <summary>
     /// 配置用户锁定的选项。
     /// </summary>
-    public class LockoutOptions
+    public class ADreamLockoutOptions
     {
         /// <value>
         /// 如果新创建的用户可以被锁定，则为true，否则为false。

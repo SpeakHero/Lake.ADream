@@ -55,7 +55,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
 
                     b.Property<int>("ShowSort");
 
-                    b.Property<byte[]>("TimeSpan")
+                    b.Property<DateTime>("TimeSpan")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
@@ -90,7 +90,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
 
                     b.Property<string>("NormalizedName");
 
-                    b.Property<byte[]>("TimeSpan")
+                    b.Property<DateTime>("TimeSpan")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
@@ -124,13 +124,13 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
 
                     b.Property<string>("RoleId");
 
-                    b.Property<byte[]>("TimeSpan")
+                    b.Property<DateTime>("TimeSpan")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoleClaim");
+                    b.ToTable("RoleClaims");
                 });
 
             modelBuilder.Entity("Lake.ADream.Models.Entities.Identity.RolePermission", b =>
@@ -164,7 +164,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     b.Property<string>("RoleId")
                         .IsRequired();
 
-                    b.Property<byte[]>("TimeSpan")
+                    b.Property<DateTime>("TimeSpan")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
@@ -177,7 +177,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolesPermissions");
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("Lake.ADream.Models.Entities.Identity.User", b =>
@@ -227,7 +227,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
 
                     b.Property<int>("Sex");
 
-                    b.Property<byte[]>("TimeSpan")
+                    b.Property<DateTime>("TimeSpan")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
@@ -269,7 +269,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
 
                     b.Property<bool>("IsDelete");
 
-                    b.Property<byte[]>("TimeSpan")
+                    b.Property<DateTime>("TimeSpan")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
@@ -306,7 +306,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ProviderKey");
 
-                    b.Property<byte[]>("TimeSpan")
+                    b.Property<DateTime>("TimeSpan")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
@@ -339,7 +339,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     b.Property<string>("RoleId")
                         .IsRequired();
 
-                    b.Property<byte[]>("TimeSpan")
+                    b.Property<DateTime>("TimeSpan")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
@@ -374,7 +374,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<byte[]>("TimeSpan")
+                    b.Property<DateTime>("TimeSpan")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 

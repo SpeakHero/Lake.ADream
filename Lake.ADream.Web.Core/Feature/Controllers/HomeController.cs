@@ -6,30 +6,30 @@ using System.Threading.Tasks;
 using Lake.ADream.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Lake.ADream.Admin.Controllers
+namespace Lake.ADream.Web.Core.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public virtual IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult About()
+        public virtual IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
 
             return View();
         }
 
-        public IActionResult Contact()
+        public virtual IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
 
             return View();
         }
 
-        public IActionResult Error()
+        public virtual IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

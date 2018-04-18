@@ -7,7 +7,7 @@ namespace Lake.ADream.Infrastructure.Identity
     /// <summary>
     /// 用户验证选项。
     /// </summary>
-    public class UserOptions
+    public class ADreamUserOptions
     {
         /// <summary>
         /// 获取或设置用于验证用户名的用户名中允许字符的列表。

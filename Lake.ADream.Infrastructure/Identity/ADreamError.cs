@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public  class IdentityError
+    public  class ADreamError
     {   /// <summary>
         /// 获取或设置此错误的代码。
         /// </summary>

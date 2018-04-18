@@ -10,10 +10,6 @@ namespace Lake.ADream.IServices
     /// </summary>
     public interface IServicesBase:IDisposable
     {
-        ILogger Logger
-        {
-            get;
-            set;
-        }
+        
     }
 }

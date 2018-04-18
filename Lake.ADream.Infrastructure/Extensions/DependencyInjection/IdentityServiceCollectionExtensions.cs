@@ -14,7 +14,7 @@ namespace Lake.ADream.Infrastructure.Extensions.DependencyInjection
     public static class IdentityServiceCollectionExtensions
     {
        ///
-        public static void AddIdentityCore(this IServiceCollection services, Action<IdentityOptions> setupAction) 
+        public static void AddIdentityCore(this IServiceCollection services, Action<ADreamOptions> setupAction) 
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

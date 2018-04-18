@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Lake.ADream.EntityFrameworkCore.Migrations
 {
-    public partial class init : Migration
+    public partial class init1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,7 +27,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     Level = table.Column<int>(nullable: false),
                     Params = table.Column<string>(nullable: true),
                     ShowSort = table.Column<int>(nullable: false),
-                    TimeSpan = table.Column<byte[]>(rowVersion: true, nullable: true)
+                    TimeSpan = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,7 +35,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleClaim",
+                name: "RoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -48,11 +48,11 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     EditedTime = table.Column<DateTime>(nullable: false),
                     IsDelete = table.Column<bool>(nullable: false),
                     RoleId = table.Column<string>(nullable: true),
-                    TimeSpan = table.Column<byte[]>(rowVersion: true, nullable: true)
+                    TimeSpan = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleClaim", x => x.Id);
+                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,7 +69,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     IsDelete = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     NormalizedName = table.Column<string>(nullable: true),
-                    TimeSpan = table.Column<byte[]>(rowVersion: true, nullable: true)
+                    TimeSpan = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,7 +89,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     EditeUser = table.Column<string>(maxLength: 50, nullable: true),
                     EditedTime = table.Column<DateTime>(nullable: false),
                     IsDelete = table.Column<bool>(nullable: false),
-                    TimeSpan = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    TimeSpan = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -111,7 +111,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     LoginProvider = table.Column<string>(nullable: true),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     ProviderKey = table.Column<string>(nullable: true),
-                    TimeSpan = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    TimeSpan = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -131,7 +131,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     EditedTime = table.Column<DateTime>(nullable: false),
                     IsDelete = table.Column<bool>(nullable: false),
                     RoleId = table.Column<string>(nullable: false),
-                    TimeSpan = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    TimeSpan = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -152,7 +152,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     IsDelete = table.Column<bool>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    TimeSpan = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    TimeSpan = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
                     Value = table.Column<string>(nullable: true)
                 },
@@ -162,7 +162,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RolesPermissions",
+                name: "RolePermissions",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -177,20 +177,20 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     PermissionId = table.Column<string>(nullable: true),
                     Regular = table.Column<string>(nullable: true),
                     RoleId = table.Column<string>(nullable: false),
-                    TimeSpan = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    TimeSpan = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RolesPermissions", x => x.Id);
+                    table.PrimaryKey("PK_RolePermissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RolesPermissions_Permissions_PermissionId",
+                        name: "FK_RolePermissions_Permissions_PermissionId",
                         column: x => x.PermissionId,
                         principalTable: "Permissions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RolesPermissions_Roles_RoleId",
+                        name: "FK_RolePermissions_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
@@ -221,7 +221,7 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                     SecurityAudit = table.Column<string>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
                     Sex = table.Column<int>(nullable: false),
-                    TimeSpan = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    TimeSpan = table.Column<DateTime>(nullable: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserClaimId = table.Column<string>(nullable: true),
                     UserName = table.Column<string>(maxLength: 50, nullable: false)
@@ -238,13 +238,13 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolesPermissions_PermissionId",
-                table: "RolesPermissions",
+                name: "IX_RolePermissions_PermissionId",
+                table: "RolePermissions",
                 column: "PermissionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolesPermissions_RoleId",
-                table: "RolesPermissions",
+                name: "IX_RolePermissions_RoleId",
+                table: "RolePermissions",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
@@ -256,10 +256,10 @@ namespace Lake.ADream.EntityFrameworkCore.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RoleClaim");
+                name: "RoleClaims");
 
             migrationBuilder.DropTable(
-                name: "RolesPermissions");
+                name: "RolePermissions");
 
             migrationBuilder.DropTable(
                 name: "UserLogins");

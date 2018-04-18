@@ -8,36 +8,38 @@ namespace Lake.ADream.Infrastructure.Identity
     /// <summary>
     /// 表示登录操作的结果。
     /// </summary>
-    public class SignInResult
+    public class ADreamSignInResult
     {
+        private const string requiresEmail = "需要激活邮箱";
+        private const string requiresPhone = "需要激活移动电话";
         private readonly string notAllowed = "不允许登陆";
         private readonly string lockedout = "账号被锁定";
         private readonly string requiresTwoFactor = "需要二次登陆验证";
         private readonly string failed = "登陆失败,账号或者密码错误！";
         private readonly string succeded = "登陆成功";
-        private static readonly SignInResult _success = new SignInResult
+        private static readonly ADreamSignInResult _success = new ADreamSignInResult
         {
             Succeeded = true
         };
 
-        private static readonly SignInResult _failed = new SignInResult();
+        private static readonly ADreamSignInResult _failed = new ADreamSignInResult();
 
-        private static readonly SignInResult _lockedOut = new SignInResult
+        private static readonly ADreamSignInResult _lockedOut = new ADreamSignInResult
         {
             IsLockedOut = true
         };
 
-        private static readonly SignInResult _notAllowed = new SignInResult
+        private static readonly ADreamSignInResult _notAllowed = new ADreamSignInResult
         {
             IsNotAllowed = true
         };
 
-        private static readonly SignInResult _twoFactorRequired = new SignInResult
+        private static readonly ADreamSignInResult _twoFactorRequired = new ADreamSignInResult
         {
             RequiresTwoFactor = true
         };
-        private static readonly SignInResult _emailConfirmed = new SignInResult { IsEmailConfirmed = false };
-        private static SignInResult _phoneNumberConfirmed = new SignInResult { IsPhoneNumberConfirmed = false };
+        private static readonly ADreamSignInResult _emailConfirmed = new ADreamSignInResult { IsEmailConfirmed = false };
+        private static ADreamSignInResult _phoneNumberConfirmed = new ADreamSignInResult { IsPhoneNumberConfirmed = false };
 
         private bool _succeeded;
         private bool _isLockedOut;
@@ -96,13 +98,13 @@ namespace Lake.ADream.Infrastructure.Identity
         /// Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult" /> that represents a successful sign-in.
         /// </summary>
         /// <returns>A <see cref="T:Microsoft.AspNetCore.Identity.SignInResult" /> that represents a successful sign-in.</returns>
-        public static SignInResult Success => _success;
+        public static ADreamSignInResult Success => _success;
 
         /// <summary>
         /// Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult" /> that represents a failed sign-in.
         /// </summary>
         /// <returns>A <see cref="T:Microsoft.AspNetCore.Identity.SignInResult" /> that represents a failed sign-in.</returns>
-        public static SignInResult Failed => _failed;
+        public static ADreamSignInResult Failed => _failed;
 
         /// <summary>
         /// Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult" /> that represents a sign-in attempt that failed because 
@@ -110,15 +112,15 @@ namespace Lake.ADream.Infrastructure.Identity
         /// </summary>
         /// <returns>A <see cref="T:Microsoft.AspNetCore.Identity.SignInResult" /> that represents sign-in attempt that failed due to the
         /// user being locked out.</returns>
-        public static SignInResult LockedOut => _lockedOut;
+        public static ADreamSignInResult LockedOut => _lockedOut;
 
         /// <summary>
         /// Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult" /> that represents a sign-in attempt that failed because 
-        /// the user is not allowed to sign-in.
+        /// 不允许登陆
         /// </summary>
         /// <returns>A <see cref="T:Microsoft.AspNetCore.Identity.SignInResult" /> that represents sign-in attempt that failed due to the
         /// user is not allowed to sign-in.</returns>
-        public static SignInResult NotAllowed => _notAllowed;
+        public static ADreamSignInResult NotAllowed => _notAllowed;
 
         /// <summary>
         /// Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult" /> that represents a sign-in attempt that needs two-factor 
@@ -126,15 +128,15 @@ namespace Lake.ADream.Infrastructure.Identity
         /// </summary>
         /// <returns>A <see cref="T:Microsoft.AspNetCore.Identity.SignInResult" /> that represents sign-in attempt that needs two-factor
         /// authentication.</returns>
-        public static SignInResult TwoFactorRequired => _twoFactorRequired;
+        public static ADreamSignInResult TwoFactorRequired => _twoFactorRequired;
         /// <summary>
         /// 
         /// </summary>
-        public static SignInResult EmailConfirmed => _emailConfirmed;
+        public static ADreamSignInResult EmailConfirmed => _emailConfirmed;
         /// <summary>
         /// 
         /// </summary>
-        public static SignInResult PhoneNumberConfirmed => _phoneNumberConfirmed;
+        public static ADreamSignInResult PhoneNumberConfirmed => _phoneNumberConfirmed;
 
         /// <summary>
         /// 
@@ -165,9 +167,9 @@ namespace Lake.ADream.Infrastructure.Identity
                             }
                             return requiresTwoFactor;
                         }
-                        return "需要激活邮箱";
+                        return requiresEmail;
                     }
-                    return "需要激活移动电话";
+                    return requiresPhone;
                 }
                 return notAllowed;
             }

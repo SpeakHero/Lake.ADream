@@ -11,6 +11,6 @@ namespace Lake.ADream.Entities.Framework
         string EditeUser { get; set; }
         string Id { get; set; }
         bool IsDelete { get; set; }
-        byte[] TimeSpan { get; set; }
+        DateTime TimeSpan { get; set; }
     }
 }

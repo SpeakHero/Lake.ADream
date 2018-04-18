@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Linq.Expressions;
@@ -25,9 +26,8 @@ namespace ConsoleTest
             //aDreamDbContext.Users.Remove(user);
             // aDreamDbContext.SaveChangesAsync();
 
-            ADreamDbContext aDreamDbContext = new ADreamDbContext();
+            ADreamDbContext aDreamDbContext = new ADreamDbContext(new DbContextOptions<ADreamDbContext> { });
             var loggerFactory = new LoggerFactory();
-            var loger = loggerFactory.CreateLogger<SignInManager>();
             //UserManagerService userManagerService = new UserManagerService(aDreamDbContext, loger,null);
             //string userid = "e148d56e-66ab-43f3-a3c5-48de5b6fd983";
             //string username = userManagerService.GetUserNameById(userid).Result;
@@ -38,50 +38,52 @@ namespace ConsoleTest
             //userManagerService.Dispose();
             //SignInManager signInManager = new SignInManager(aDreamDbContext, null);
             //var sin = signInManager.SignIn("SuperAdmin", "123456");
-            //IList<string> filedname = new List<string>();
-            //foreach (var item in GetReferencingAssemblies())
-            //{
-            //    var mytableName = item.GetCustomAttributes(typeof(TableAttribute), true);
-            //    if (mytableName.Length > 0)
-            //    {
-            //        TableAttribute mytable = mytableName[0] as TableAttribute;
-            //        tableName = mytable.Name;
-            //    }
-            //    else
-            //    {
-            //        tableName = item.Name;
-            //    }
+            IList<string> filedname = new List<string>();
+            foreach (var item in GetReferencingAssemblies())
+            {
+                var mytableName = item.GetCustomAttributes(typeof(TableAttribute), true);
+                if (mytableName.Length > 0)
+                {
+                    TableAttribute mytable = mytableName[0] as TableAttribute;
+                    tableName = mytable.Name;
+                }
+                else
+                {
 
-            //   var fileds= item.GetProperties().Where(a => a.GetCustomAttributes(typeof(UniqueAttribute), true).Count() > 0);
-            //    foreach (var field in fileds)
+                   
+                    tableName = item.Name+"s";
+                }
+                var dbsetname = typeof(ADreamDbContext).GetProperties().Where(d => d.PropertyType.Name.Equals(item.Name));
+                var fileds= item.GetProperties().Where(a => a.GetCustomAttributes(typeof(UniqueAttribute), true).Count() > 0);
+                foreach (var field in fileds)
+                {
+                    filedname.Add(field.Name);
+                }
+            }
+            //object c1=null, c2=null;
+            //var entity = new User() { Id="333",Email="dsfds"};
+            //foreach (PropertyInfo p in entity.GetType().GetProperties())
+            //{
+            //    var va = p.GetCustomAttributes(typeof(DefaultValuesAttribute), true);
+            //    try
             //    {
-            //        filedname.Add(field.Name);
+            //         c1 = p.GetConstantValue();
+            //         c2 = p.GetRawConstantValue();
+            //    }
+            //    catch (Exception)
+            //    {
+
+                   
+            //    }
+               
+
+            //    if (va.Length>0)
+            //    if (c1 != null||c2!=null)
+            //    {
+                    
             //    }
             //}
-            using (UserManagerService userManagerService = new UserManagerService(aDreamDbContext, null))
-            {
-                var user3 = new User();
-                user3.UserName = "SuperAdmin4";
-                user3.PasswordHash = "123qwe";
-                user3.PhoneNumber = user3.Email = user3.Id;
-                user3.EmailConfirmed = true;
-                user3.PhoneNumberConfirmed = true;
-                var user2 = new User();
-                user2.UserName = "SuperAdmin3";
-                user2.PasswordHash = "123qwe";
-                user2.PhoneNumber = user2.Email = user2.Id;
-                user2.EmailConfirmed = true;
-                user2.PhoneNumberConfirmed = true;
-                var user1 = new User();
-                user1.UserName = "SuperAdmin3";
-                user1.PasswordHash = "123qwe";
-                user1.PhoneNumber = user1.Email = user1.Id;
-                user1.EmailConfirmed = true;
-                user1.PhoneNumberConfirmed = true;
-                var reslut =  userManagerService.CreateAsync(false, user2, user1, user3).Result;
-                var a =  userManagerService.SaveChangesAsync().Result;
-            }
-            aDreamDbContext.Dispose();
+ 
         }
 
         private static IEnumerable<Type> GetReferencingAssemblies()
